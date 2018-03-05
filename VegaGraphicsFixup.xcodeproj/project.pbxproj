@@ -41,10 +41,6 @@
 		3BAED1281FE8F415008A4363 /* mac_policy.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAED1221FE8F415008A4363 /* mac_policy.h */; };
 		3BAED1291FE8F415008A4363 /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAED1231FE8F415008A4363 /* plugin_start.cpp */; };
 		3BAED12A1FE8F415008A4363 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BAED1241FE8F415008A4363 /* libkmod.a */; };
-		F65909931F7E8A4F005C96D1 /* kern_audio.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F65909911F7E8A4F005C96D1 /* kern_audio.hpp */; };
-		F65909941F7E8A4F005C96D1 /* kern_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F65909921F7E8A4F005C96D1 /* kern_audio.cpp */; };
-		F69B33D91F9BCECD00F26009 /* FAQ.md in Resources */ = {isa = PBXBuildFile; fileRef = F69B33D81F9BCECC00F26009 /* FAQ.md */; };
-		F6AA9BFB1F927574004D869C /* kern_config.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F6AA9BFA1F927574004D869C /* kern_config.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,7 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1C748C271C21952C0024EED2 /* NvidiaGraphicsFixup.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NvidiaGraphicsFixup.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C748C271C21952C0024EED2 /* VegaGraphicsFixup.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VegaGraphicsFixup.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C748C2C1C21952C0024EED2 /* kern_start.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kern_start.cpp; sourceTree = "<group>"; };
 		1C748C2E1C21952C0024EED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C9CB7AE1C789FF500231E41 /* kern_ngfx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_ngfx.cpp; sourceTree = "<group>"; };
@@ -99,10 +95,6 @@
 		3BAED1221FE8F415008A4363 /* mac_policy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mac_policy.h; sourceTree = "<group>"; };
 		3BAED1231FE8F415008A4363 /* plugin_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_start.cpp; path = Lilu.kext/Contents/Resources/Library/plugin_start.cpp; sourceTree = "<group>"; };
 		3BAED1241FE8F415008A4363 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = Lilu.kext/Contents/Resources/Library/libkmod.a; sourceTree = "<group>"; };
-		F65909911F7E8A4F005C96D1 /* kern_audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_audio.hpp; sourceTree = "<group>"; };
-		F65909921F7E8A4F005C96D1 /* kern_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_audio.cpp; sourceTree = "<group>"; };
-		F69B33D81F9BCECC00F26009 /* FAQ.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = FAQ.md; sourceTree = "<group>"; };
-		F6AA9BFA1F927574004D869C /* kern_config.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_config.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				1CF01C911C8CF982002DCEA3 /* Docs */,
-				1C748C291C21952C0024EED2 /* NvidiaGraphicsFixup */,
+				1C748C291C21952C0024EED2 /* VegaGraphicsFixup */,
 				CE405EC81E49DD7B00AA0B3D /* SDK */,
 				1C748C281C21952C0024EED2 /* Products */,
 			);
@@ -130,29 +122,25 @@
 		1C748C281C21952C0024EED2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1C748C271C21952C0024EED2 /* NvidiaGraphicsFixup.kext */,
+				1C748C271C21952C0024EED2 /* VegaGraphicsFixup.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1C748C291C21952C0024EED2 /* NvidiaGraphicsFixup */ = {
+		1C748C291C21952C0024EED2 /* VegaGraphicsFixup */ = {
 			isa = PBXGroup;
 			children = (
-				F6AA9BFA1F927574004D869C /* kern_config.hpp */,
-				F65909921F7E8A4F005C96D1 /* kern_audio.cpp */,
-				F65909911F7E8A4F005C96D1 /* kern_audio.hpp */,
 				1C748C2C1C21952C0024EED2 /* kern_start.cpp */,
 				1C9CB7AE1C789FF500231E41 /* kern_ngfx.cpp */,
 				1C9CB7AF1C789FF500231E41 /* kern_ngfx.hpp */,
 				1C748C2E1C21952C0024EED2 /* Info.plist */,
 			);
-			path = NvidiaGraphicsFixup;
+			path = VegaGraphicsFixup;
 			sourceTree = "<group>";
 		};
 		1CF01C911C8CF982002DCEA3 /* Docs */ = {
 			isa = PBXGroup;
 			children = (
-				F69B33D81F9BCECC00F26009 /* FAQ.md */,
 				1CF01C901C8CF97F002DCEA3 /* README.md */,
 				1CF01C931C8DF02E002DCEA3 /* LICENSE.txt */,
 				1CF01C921C8CF997002DCEA3 /* Changelog.md */,
@@ -244,13 +232,11 @@
 				3BAED1271FE8F415008A4363 /* mac_framework.h in Headers */,
 				1C9CB7B11C789FF500231E41 /* kern_ngfx.hpp in Headers */,
 				3BAED1071FE8F3F9008A4363 /* capstone.h in Headers */,
-				F65909931F7E8A4F005C96D1 /* kern_audio.hpp in Headers */,
 				3BAED1161FE8F3F9008A4363 /* kern_iokit.hpp in Headers */,
 				3BAED11B1FE8F3F9008A4363 /* kern_user.hpp in Headers */,
 				3BAED1151FE8F3F9008A4363 /* kern_file.hpp in Headers */,
 				3BAED1101FE8F3F9008A4363 /* kern_compat.hpp in Headers */,
 				3BAED1131FE8F3F9008A4363 /* kern_crypto.hpp in Headers */,
-				F6AA9BFB1F927574004D869C /* kern_config.hpp in Headers */,
 				3BAED1141FE8F3F9008A4363 /* kern_disasm.hpp in Headers */,
 				3BAED1081FE8F3F9008A4363 /* mips.h in Headers */,
 				3BAED10F1FE8F3F9008A4363 /* kern_api.hpp in Headers */,
@@ -269,9 +255,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		1C748C261C21952C0024EED2 /* NvidiaGraphicsFixup */ = {
+		1C748C261C21952C0024EED2 /* VegaGraphicsFixup */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "NvidiaGraphicsFixup" */;
+			buildConfigurationList = 1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "VegaGraphicsFixup" */;
 			buildPhases = (
 				1C748C221C21952C0024EED2 /* Sources */,
 				1C748C231C21952C0024EED2 /* Frameworks */,
@@ -283,9 +269,9 @@
 			);
 			dependencies = (
 			);
-			name = NvidiaGraphicsFixup;
+			name = VegaGraphicsFixup;
 			productName = NvidiaGraphicsFixup;
-			productReference = 1C748C271C21952C0024EED2 /* NvidiaGraphicsFixup.kext */;
+			productReference = 1C748C271C21952C0024EED2 /* VegaGraphicsFixup.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
 /* End PBXNativeTarget section */
@@ -302,7 +288,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "NvidiaGraphicsFixup" */;
+			buildConfigurationList = 1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "VegaGraphicsFixup" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -314,7 +300,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1C748C261C21952C0024EED2 /* NvidiaGraphicsFixup */,
+				1C748C261C21952C0024EED2 /* VegaGraphicsFixup */,
 			);
 		};
 /* End PBXProject section */
@@ -324,7 +310,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F69B33D91F9BCECD00F26009 /* FAQ.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,7 +320,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F65909941F7E8A4F005C96D1 /* kern_audio.cpp in Sources */,
 				3BAED1291FE8F415008A4363 /* plugin_start.cpp in Sources */,
 				1C9CB7B01C789FF500231E41 /* kern_ngfx.cpp in Sources */,
 				1C748C2D1C21952C0024EED2 /* kern_start.cpp in Sources */,
@@ -445,10 +429,9 @@
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = Lilu.kext/Contents/Resources;
-				INFOPLIST_FILE = NvidiaGraphicsFixup/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/VegaGraphicsFixup/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Volumes/evo/crack/Lilu/Lilu/Library,
 					"$(PROJECT_DIR)/Lilu.kext/Contents/Resources/Library",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -469,7 +452,7 @@
 					"-fno-asynchronous-unwind-tables",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = as.lvs1974.NvidiaGraphicsFixup;
+				PRODUCT_BUNDLE_IDENTIFIER = as.lvs1974.VegaGraphicsFixup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -489,10 +472,9 @@
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
 				);
 				HEADER_SEARCH_PATHS = Lilu.kext/Contents/Resources;
-				INFOPLIST_FILE = NvidiaGraphicsFixup/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/VegaGraphicsFixup/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Volumes/evo/crack/Lilu/Lilu/Library,
 					"$(PROJECT_DIR)/Lilu.kext/Contents/Resources/Library",
 				);
 				LLVM_LTO = YES;
@@ -514,7 +496,7 @@
 					"-fno-asynchronous-unwind-tables",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = as.lvs1974.NvidiaGraphicsFixup;
+				PRODUCT_BUNDLE_IDENTIFIER = as.lvs1974.VegaGraphicsFixup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_STYLE = "non-global";
 				WRAPPER_EXTENSION = kext;
@@ -524,7 +506,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "NvidiaGraphicsFixup" */ = {
+		1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "VegaGraphicsFixup" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1C748C2F1C21952C0024EED2 /* Debug */,
@@ -533,7 +515,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "NvidiaGraphicsFixup" */ = {
+		1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "VegaGraphicsFixup" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1C748C321C21952C0024EED2 /* Debug */,

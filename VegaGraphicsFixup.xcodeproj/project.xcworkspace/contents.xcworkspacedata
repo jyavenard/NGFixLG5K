@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:NvidiaGraphicsFixup.xcodeproj">
+      location = "self:/Users/jyavenard/Work/Hackintosh/5K/Vega5KFixup/VegaGraphicsFixup.xcodeproj">
    </FileRef>
 </Workspace>
