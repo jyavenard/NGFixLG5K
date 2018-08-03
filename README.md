@@ -3,6 +3,9 @@ VegaGraphicsFixup
 
 An open source kernel extension providing simple initialisation of Vega adapters.
 
+#### Installation
+- Must install Lilu.kext (make sure Release/Debug config match Lilu extension type)
+
 #### Features
 - Fixes for 5K display
 - Allow screen hotplug
