@@ -19,7 +19,7 @@ bool ADDPR(startSuccess) = true;
 bool ADDPR(debugEnabled) = false;
 uint32_t ADDPR(debugPrintDelay) = 0;
 
-#ifndef LILU_CUSTOM_IOKIT_INIT
+#if !defined(LILU_CUSTOM_KMOD_INIT) || !defined(LILU_CUSTOM_IOKIT_INIT)
 
 static const char kextVersion[] {
 #ifdef DEBUG
@@ -31,6 +31,10 @@ static const char kextVersion[] {
 	getBuildYear<0>(), getBuildYear<1>(), getBuildYear<2>(), getBuildYear<3>(), '-',
 	getBuildMonth<0>(), getBuildMonth<1>(), '-', getBuildDay<0>(), getBuildDay<1>(), '\0'
 };
+
+#endif
+
+#ifndef LILU_CUSTOM_IOKIT_INIT
 
 OSDefineMetaClassAndStructors(PRODUCT_NAME, IOService)
 
@@ -49,7 +53,7 @@ bool PRODUCT_NAME::start(IOService *provider) {
 		SYSLOG("init", "failed to start the parent");
 		return false;
 	}
-	
+
 	return ADDPR(startSuccess);
 }
 
@@ -71,14 +75,16 @@ EXPORT extern "C" kern_return_t ADDPR(kern_start)(kmod_info_t *, void *) {
 		error = lilu.shouldLoad(ADDPR(config).product, ADDPR(config).version, ADDPR(config).runmode, ADDPR(config).disableArg, ADDPR(config).disableArgNum,
 								ADDPR(config).debugArg, ADDPR(config).debugArgNum, ADDPR(config).betaArg, ADDPR(config).betaArgNum, ADDPR(config).minKernel,
 								ADDPR(config).maxKernel, ADDPR(debugEnabled));
-		
+
 		if (error == LiluAPI::Error::NoError) {
+			DBGLOG("init", "%s bootstrap %s", xStringify(PRODUCT_NAME), kextVersion);
+			(void)kextVersion;
 			ADDPR(startSuccess) = true;
 			ADDPR(config).pluginStart();
 		} else {
 			SYSLOG("init", "parent said we should not continue %d", error);
 		}
-		
+
 		lilu.releaseAccess();
 	} else {
 		SYSLOG("init", "failed to call parent %d", error);
@@ -95,3 +101,21 @@ EXPORT extern "C" kern_return_t ADDPR(kern_stop)(kmod_info_t *, void *) {
 }
 
 #endif /* LILU_CUSTOM_KMOD_INIT */
+
+#ifdef __MAC_10_15
+
+// macOS 10.15 adds Dispatch function to all OSObject instances and basically
+// every header is now incompatible with 10.14 and earlier.
+// Here we add a stub to permit older macOS versions to link.
+// Note, this is done in both kern_util and plugin_start as plugins will not link
+// to Lilu weak exports from vtable.
+
+kern_return_t WEAKFUNC PRIVATE OSObject::Dispatch(const IORPC rpc) {
+	PANIC("util", "OSObject::Dispatch plugin stub called");
+}
+
+kern_return_t WEAKFUNC PRIVATE OSMetaClassBase::Dispatch(const IORPC rpc) {
+	PANIC("util", "OSMetaClassBase::Dispatch plugin stub called");
+}
+
+#endif

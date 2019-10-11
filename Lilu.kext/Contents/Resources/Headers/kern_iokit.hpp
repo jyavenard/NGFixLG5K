@@ -11,6 +11,7 @@
 #include <Headers/kern_config.hpp>
 #include <Headers/kern_util.hpp>
 #include <Headers/kern_patcher.hpp>
+#include <Library/LegacyLibkernMacros.h>
 
 #include <libkern/c++/OSSerialize.h>
 #include <IOKit/IORegistryEntry.h>
@@ -18,7 +19,7 @@
 namespace WIOKit {
 
 	/**
-	 *  AppleHDAEngine::getLocation teaches us to use while(1) when talking to IOReg
+	 *  AppleHDAEngine::getLocation teaches us to use loop infinitely when talking to IOReg
 	 *  This feels mad and insane, since it may prevent the system from booting.
 	 *  Although this had never happened, we will use a far bigger fail-safe stop value.
 	 */
@@ -50,6 +51,15 @@ namespace WIOKit {
 		return false;
 	}
 
+	/**
+	 *  Read typed OSData through a temp type
+	 *
+	 *  @param obj    read object
+	 *  @param value  read value
+	 *  @param name   propert name
+	 *
+	 *  @return true on success
+	 */
 	template <typename AS, typename T>
 	inline bool getOSDataValue(const OSObject *obj, const char *name, T &value) {
 		AS tmp;
@@ -76,9 +86,29 @@ namespace WIOKit {
 	 *
 	 *  @see getOSDataValue
 	 */
+	template <typename AS, typename T>
+	inline bool getOSDataValue(const IORegistryEntry *sect, const char *name, T &value) {
+		return getOSDataValue<AS>(sect->getProperty(name), name, value);
+	}
+
+	/**
+	 *  Read typed OSData from IORegistryEntry
+	 *
+	 *  @see getOSDataValue
+	 */
 	template <typename T>
 	inline bool getOSDataValue(const OSDictionary *dict, const char *name, T &value) {
 		return getOSDataValue(dict->getObject(name), name, value);
+	}
+
+	/**
+	 *  Read typed OSData from IORegistryEntry
+	 *
+	 *  @see getOSDataValue
+	 */
+	template <typename AS, typename T>
+	inline bool getOSDataValue(const OSDictionary *dict, const char *name, T &value) {
+		return getOSDataValue<AS>(dict->getObject(name), name, value);
 	}
 
 	/**
@@ -89,7 +119,7 @@ namespace WIOKit {
 	 *
 	 *  @return property object (must be released) or nullptr
 	 */
-	EXPORT OSSerialize *getProperty(IORegistryEntry *entry, const char *property);
+	EXPORT LIBKERN_RETURNS_RETAINED OSSerialize *getProperty(IORegistryEntry *entry, const char *property);
 
 	/**
 	 *  Model variants
@@ -109,8 +139,10 @@ namespace WIOKit {
 	struct VendorID {
 		enum : uint16_t {
 			ATIAMD = 0x1002,
-			NVIDIA = 0x10de,
-			Intel = 0x8086
+			AMDZEN = 0x1022,
+			NVIDIA = 0x10DE,
+			Intel  = 0x8086,
+			VMware = 0x15AD
 		};
 	};
 
@@ -119,12 +151,21 @@ namespace WIOKit {
 	 */
 	struct ClassCode {
 		enum : uint32_t {
-			VGAController = 0x30000,
-			DisplayController = 0x38000,
-			PCIBridge = 0x60400,
-			HDADevice = 0x040300,
+			VGAController     = 0x030000,
+			// I have never seen this one, but laptops are evil.
+			XGAController     = 0x030100,
+			// Some laptops use this for Optimus GPUs.
+			Ex3DController    = 0x030200,
+			DisplayController = 0x038000,
+			PCIBridge         = 0x060400,
+			// HDA device on some laptops like Acer Aspire VN7-592G (INSYDE).
+			HDAMmDevice       = 0x040100,
+			// Watch out for PCISubclassMask, 0x040380 is common on laptops.
+			HDADevice         = 0x040300,
 			// This does not seem to be documented. It works on Haswell at least.
-			IMEI = 0x78000
+			IMEI              = 0x078000,
+			// To ignore device subclasses.
+			PCISubclassMask   = 0xFFFF00,
 		};
 	};
 
@@ -196,8 +237,10 @@ namespace WIOKit {
 	 *  @param reg      PCI config register
 	 *  @param space    adress space
 	 *  @param size     read size for reading custom registers
+	 *
+	 *  @return value read
 	 */
-    EXPORT uint32_t readPCIConfigValue(IORegistryEntry *service, uint32_t reg, uint32_t space = 0, uint32_t size = 0);
+	EXPORT uint32_t readPCIConfigValue(IORegistryEntry *service, uint32_t reg, uint32_t space = 0, uint32_t size = 0);
 
 	/**
 	 *  Retrieve PCI device address
@@ -207,7 +250,7 @@ namespace WIOKit {
 	 *  @param device    device address
 	 *  @param function  function address
 	 */
-    EXPORT void getDeviceAddress(IORegistryEntry *service, uint8_t &bus, uint8_t &device, uint8_t &function);
+	EXPORT void getDeviceAddress(IORegistryEntry *service, uint8_t &bus, uint8_t &device, uint8_t &function);
 
 	/**
 	 *  Retrieve the computer type
@@ -240,7 +283,7 @@ namespace WIOKit {
 	 *
 	 *  @return entry pointer (must NOT be released) or nullptr (on failure or in proc mode)
 	 */
-	EXPORT IORegistryEntry *findEntryByPrefix(const char *path, const char *prefix, const IORegistryPlane *plane, bool (*proc)(void *, IORegistryEntry *)=nullptr, bool brute=false, void *user=nullptr);
+	EXPORT LIBKERN_RETURNS_NOT_RETAINED IORegistryEntry *findEntryByPrefix(const char *path, const char *prefix, const IORegistryPlane *plane, bool (*proc)(void *, IORegistryEntry *)=nullptr, bool brute=false, void *user=nullptr);
 
 	/**
 	 *  Retrieve an ioreg entry by path/prefix
@@ -254,7 +297,7 @@ namespace WIOKit {
 	 *
 	 *  @return entry pointer (must NOT be released) or nullptr (on failure or in proc mode)
 	 */
-	EXPORT IORegistryEntry *findEntryByPrefix(IORegistryEntry *entry, const char *prefix, const IORegistryPlane *plane, bool (*proc)(void *, IORegistryEntry *)=nullptr, bool brute=false, void *user=nullptr);
+	EXPORT LIBKERN_RETURNS_NOT_RETAINED IORegistryEntry *findEntryByPrefix(IORegistryEntry *entry, const char *prefix, const IORegistryPlane *plane, bool (*proc)(void *, IORegistryEntry *)=nullptr, bool brute=false, void *user=nullptr);
 
 	/**
 	 *  Check if we are using prelinked kernel/kexts or not
@@ -272,7 +315,7 @@ namespace WIOKit {
 	 *
 	 *  @return true on success
 	 */
-    EXPORT bool renameDevice(IORegistryEntry *entry, const char *name, bool compat=true);
+	EXPORT bool renameDevice(IORegistryEntry *entry, const char *name, bool compat=true);
 }
 
 #endif /* kern_iokit_hpp */

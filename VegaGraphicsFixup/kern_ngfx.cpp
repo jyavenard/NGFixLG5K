@@ -3,7 +3,7 @@
 //  VegaGraphicsFixup based on NvidiaGraphicsFixup
 //
 //  Copyright © 2017 lvs1974. All rights reserved.
-//  Copyright © 2018 JYA. All rights reserved.
+//  Copyright © 2018-2019 JYA. All rights reserved.
 //
 
 #include <Headers/kern_api.hpp>

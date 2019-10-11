@@ -25,12 +25,12 @@ public:
 	 *  @return true on success
 	 */
 	bool init(KernelPatcher &patcher, bool preferSlowMode);
-	
+
 	/**
 	 *  Deinitialise UserPatcher, must be called regardless of the init error
 	 */
 	void deinit();
-	
+
 	/**
 	 *  Obtain page protection
 	 *
@@ -59,7 +59,7 @@ public:
 		SegmentsDataEnd = SegmentDataCommon,
 		SegmentTotal
 	};
-	
+
 	/**
 	 *  Mach segment names kept in sync with FileSegment
 	 */
@@ -73,7 +73,7 @@ public:
 		"__DATA",
 		"__DATA"
 	};
-	
+
 	/**
 	 *  Mach section names kept in sync with FileSegment
 	 */
@@ -87,7 +87,7 @@ public:
 		"__cfstring",
 		"__common"
 	};
-	
+
 	/**
 	 *  Structure holding lookup-style binary patches
 	 */
@@ -101,7 +101,7 @@ public:
 		FileSegment segment;
 		uint32_t section;
 	};
-	
+
 	/**
 	 *  Structure describing the modifications for the binary
 	 */
@@ -140,7 +140,7 @@ public:
 		uint32_t section {SectionDisabled};
 		uint32_t flags {MatchExact};
 	};
-	
+
 	/**
 	 *  External callback type for on process invocation
 	 *
@@ -151,7 +151,7 @@ public:
 	 *  @param len     path length excluding null terminator
 	 */
 	using t_BinaryLoaded = void (*)(void *user, UserPatcher &patcher, vm_map_t map, const char *path, size_t len);
-	
+
 	/**
 	 *  Instructs user patcher to do further actions
 	 *
@@ -212,43 +212,39 @@ public:
 	 *  Activates monitoring functions if necessary
 	 */
 	void activate();
-	
+
 private:
-	
+
 	/**
 	 *  Kernel function prototypes
 	 */
 	using vm_shared_region_t = void *;
 	using shared_file_mapping_np = void *;
-	using t_codeSignValidatePageWrapper = boolean_t (*)(void *, memory_object_t, memory_object_offset_t, const void *, unsigned *);
-	using t_codeSignValidateRangeWrapper = boolean_t (*)(void *, memory_object_t, memory_object_offset_t, const void *, memory_object_size_t, unsigned *);
-	using t_vmSharedRegionMapFile = kern_return_t (*)(vm_shared_region_t, unsigned int, shared_file_mapping_np *, memory_object_control_t, memory_object_size_t, void *, uint32_t, user_addr_t slide_start, user_addr_t);
-	using t_vmSharedRegionSlide = int (*)(uint32_t, mach_vm_offset_t, mach_vm_size_t, mach_vm_offset_t, mach_vm_size_t, memory_object_control_t);
-	using t_vmSharedRegionSlideMojave = int (*)(uint32_t, mach_vm_offset_t, mach_vm_size_t, mach_vm_offset_t, mach_vm_size_t, mach_vm_offset_t, memory_object_control_t);
 	using t_currentMap = vm_map_t (*)(void);
 	using t_getTaskMap = vm_map_t (*)(task_t);
 	using t_getMapMin = vm_map_offset_t (*)(vm_map_t);
+	using t_vmMapSwitchProtect = void (*)(vm_map_t, boolean_t);
 	using t_vmMapCheckProtection = boolean_t (*)(vm_map_t, vm_offset_t, vm_offset_t, vm_prot_t);
 	using t_vmMapReadUser = kern_return_t (*)(vm_map_t, vm_map_address_t, const void *, vm_size_t);
 	using t_vmMapWriteUser = kern_return_t (*)(vm_map_t, const void *, vm_map_address_t, vm_size_t);
-	using t_procExecSwitchTask = proc_t (*)(proc_t, task_t, task_t, thread_t);
 
 	/**
 	 *  Original kernel function trampolines
 	 */
-	t_codeSignValidatePageWrapper orgCodeSignValidatePageWrapper {nullptr};
-	t_codeSignValidateRangeWrapper orgCodeSignValidateRangeWrapper {nullptr};
-	t_vmSharedRegionMapFile orgVmSharedRegionMapFile {nullptr};
-	t_vmSharedRegionSlide orgVmSharedRegionSlide {nullptr};
-	t_vmSharedRegionSlideMojave orgVmSharedRegionSlideMojave {nullptr};
+	mach_vm_address_t orgCodeSignValidatePageWrapper {};
+	mach_vm_address_t orgCodeSignValidateRangeWrapper {};
+	mach_vm_address_t orgVmSharedRegionMapFile {};
+	mach_vm_address_t orgVmSharedRegionSlide {};
+	mach_vm_address_t orgVmSharedRegionSlideMojave {};
 	t_currentMap orgCurrentMap {nullptr};
 	t_getMapMin orgGetMapMin {nullptr};
 	t_getTaskMap orgGetTaskMap {nullptr};
+	t_vmMapSwitchProtect orgVmMapSwitchProtect {nullptr};
 	t_vmMapCheckProtection orgVmMapCheckProtection {nullptr};
 	t_vmMapReadUser orgVmMapReadUser {nullptr};
 	t_vmMapWriteUser orgVmMapWriteUser {nullptr};
-	t_procExecSwitchTask orgProcExecSwitchTask {nullptr};
-	
+	mach_vm_address_t orgTaskSetMainThreadQos {};
+
 	/**
 	 *  Kernel function wrappers
 	 */
@@ -260,7 +256,7 @@ private:
 	static void execsigs(proc_t p, thread_t thread);
 	static int vmSharedRegionSlide(uint32_t slide, mach_vm_offset_t entry_start_address, mach_vm_size_t entry_size, mach_vm_offset_t slide_start, mach_vm_size_t slide_size, memory_object_control_t sr_file_control);
 	static int vmSharedRegionSlideMojave(uint32_t slide, mach_vm_offset_t entry_start_address, mach_vm_size_t entry_size, mach_vm_offset_t slide_start, mach_vm_size_t slide_size, mach_vm_offset_t slid_mapping, memory_object_control_t sr_file_control);
-	static proc_t procExecSwitchTask(proc_t p, task_t current_task, task_t new_task, thread_t new_thread);
+	static void taskSetMainThreadQos(task_t task, thread_t main_thread);
 
 	/**
 	 *  Applies page patches to the memory range
@@ -281,7 +277,7 @@ private:
 		vm_address_t startDATA;
 		vm_address_t endDATA;
 	};
-	
+
 	/**
 	 *  Obtains __TEXT addresses from .map files
 	 *
@@ -303,62 +299,67 @@ private:
 	 *  Set once shared cache slide is defined
 	 */
 	bool sharedCacheSlideStored {false};
-	
+
 	/**
 	 *  Set on init to decide on whether to use __RESTRICT or patch dyld shared cache
 	 */
 	bool patchDyldSharedCache {false};
-	
+
 	/**
 	 *  Kernel patcher instance
 	 */
 	KernelPatcher *patcher {nullptr};
-	
+
 	/**
-	 *  Patch requested for path
+	 *  Pending callback entry
 	 */
-	char pendingPath[MAXPATHLEN] {};
-	
+	struct PendingUser {
+		/**
+		 *  Patch requested for path
+		 */
+		char path[MAXPATHLEN] {};
+
+		/**
+		 *  Patch requested for path
+		 */
+		uint32_t pathLen {0};
+	};
+
 	/**
-	 *  Patch requested for path
+	 *  Stored pending callback
 	 */
-	uint32_t pendingPathLen {0};
-	
-	/**
-	 *  Patch requested
-	 */
-	bool pendingPatchCallback {false};
-	
+	ThreadLocal<PendingUser *, 32> pending;
+
 	/**
 	 *  Current minimal proc name length
 	 */
 	uint32_t currentMinProcLength {0};
-	
+
 	/**
 	 *  Provided binary modification list
 	 */
 	BinaryModInfo **binaryMod {nullptr};
-	
+
 	/**
 	 *  Amount of provided binary modifications
 	 */
 	size_t binaryModSize {0};
-	
+
 	/**
 	 *  Provided process list
 	 */
 	ProcInfo **procInfo {nullptr};
-	
+
 	/**
 	 *  Amount of provided processes
 	 */
 	size_t procInfoSize {0};
-	
+
 	/**
 	 *  Provided global callback for on proc invocation
 	 */
 	ppair<t_BinaryLoaded, void *> userCallback {};
-	
+
 	/**
 	 *  Applies dyld shared cache patches
 	 *
@@ -380,13 +381,13 @@ private:
 			static PatchRef *create() {
 				return new PatchRef;
 			}
-			static void deleter(PatchRef *r) {
+			static void deleter(PatchRef *r NONNULL) {
 				r->pageOffs.deinit();
 				r->segOffs.deinit();
 				delete r;
 			}
 		};
-		
+
 		const BinaryModInfo *mod {nullptr};
 		evector<PatchRef *, PatchRef::deleter> refs;
 		Page *page {nullptr};
@@ -403,8 +404,8 @@ private:
 			}
 			return p;
 		}
-		
-		static void deleter(LookupStorage *p) {
+
+		static void deleter(LookupStorage *p NONNULL) {
 			if (p->page) {
 				Page::deleter(p->page);
 				p->page = nullptr;
@@ -419,10 +420,10 @@ private:
 		static constexpr size_t matchNum {4};
 		evector<uint64_t> c[matchNum];
 	};
-	
+
 	evector<LookupStorage *, LookupStorage::deleter> lookupStorage;
 	Lookup lookup;
-	
+
 	/**
 	 *  Restrict 64-bit entry overlapping DYLD_SHARED_CACHE to enforce manual library loading
 	 */
@@ -433,7 +434,7 @@ private:
 		SHARED_REGION_BASE_X86_64,
 		1, 0, 0, 0, 0, 0, 0
 	};
-	
+
 	/**
 	 *  Restrict 32-bit entry overlapping DYLD_SHARED_CACHE to enforce manual library loading
 	 */
@@ -444,7 +445,7 @@ private:
 		SHARED_REGION_BASE_I386,
 		1, 0, 0, 0, 0, 0, 0
 	};
-	
+
 	/**
 	 *  Temporary buffer for reading image data
 	 */
@@ -454,17 +455,22 @@ private:
 	 *  Kernel auth listener handle
 	 */
 	kauth_listener_t listener {nullptr};
-	
+
 	/**
 	 *  Patcher status
 	 */
 	bool activated {false};
-	
+
 	/**
 	 *  Validation cookie
 	 */
-	void *cookie = {reinterpret_cast<void *>(0xB16B00B5)};
-	
+	void *cookie {nullptr};
+
+	/**
+	 *  Flags for codesign (PL) offset in struct proc. (uint32_t p_csflags)
+	 */
+	size_t csFlagsOffset {0};
+
 	/**
 	 *  Exec callback
 	 *
@@ -473,12 +479,16 @@ private:
 	 *  @param action     passed action, we only need KAUTH_FILEOP_EXEC
 	 *  @param arg0       pointer to vnode (vnode *) for executable
 	 *  @param arg1       pointer to path (char *) to executable
-	 *  @param arg2       unused
-	 *  @param arg3       unsed
 	 *
 	 *  @return 0 to allow further execution
 	 */
-	static int execListener(kauth_cred_t credential, void *idata, kauth_action_t action, uintptr_t arg0, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3);
+	static int execListener(kauth_cred_t /* credential */, void *idata, kauth_action_t action, uintptr_t /* arg0 */, uintptr_t arg1, uintptr_t, uintptr_t);
+
+	/**
+	 *  Unrestricted vm_protect, that takes care of Mojave codesign limitations for everyone's good.
+	 *  See vm_protect description.
+	 */
+	kern_return_t vmProtect(vm_map_t map, vm_offset_t start, vm_size_t size, boolean_t set_maximum, vm_prot_t new_protection);
 
 	/**
 	 *  Callback invoked at process loading
@@ -487,28 +497,28 @@ private:
 	 *  @param len  path length
 	 */
 	void onPath(const char *path, uint32_t len);
-	
+
 	/**
 	 *  Reads files from BinaryModInfos and prepares lookupStorage
 	 *
 	 *  @return true on success
 	 */
 	bool loadFilesForPatching();
-	
+
 	/**
 	 *  Reads dyld shared cache and obtains segment offsets
 	 *
 	 *  @return true on success
 	 */
 	bool loadDyldSharedCacheMapping();
-	
+
 	/**
 	 *  Prepares quick page lookup based on lookupStorage values
 	 *
 	 *  @return true on success
 	 */
 	bool loadLookups();
-	
+
 	/**
 	 *  Hooks memory access to get ready for patching
 	 *
@@ -524,7 +534,7 @@ private:
 	 *  @param len  path length
 	 */
 	void patchBinary(vm_map_t map, const char *path, uint32_t len);
-	
+
 	/**
 	 *  Dyld shared cache map path for 10.10+ on Haswell
 	 */

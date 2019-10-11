@@ -25,9 +25,9 @@
 
 /**
  *  Custom GUIDs used for Lilu preferences
- *  Must be kept in sync to Headers/Guid/LiluVariables.h
+ *  Must be kept in sync to OcSupportPkg/Include/Guid/OcVariables.h
  */
-#define LILU_NORMAL_GUID "2660DD78-81D2-419D-8138-7B1F363F79A6"
+#define LILU_VENDOR_GUID "4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102"
 #define LILU_READ_ONLY_GUID "E09B9297-7928-4440-9AAB-D1F8536FBF0A"
 #define LILU_WRITE_ONLY_GUID "F0B9AF8F-2222-4840-8A37-ECF7CC8C12E1"
 
@@ -41,7 +41,7 @@ class NVStorage {
 	 *  Local nvram controller reference
 	 */
 	IORegistryEntry *dtEntry {nullptr};
-	
+
 public:
 	/**
 	 *  Compress data with a default compression algorithm
@@ -53,7 +53,7 @@ public:
 	 *  @return compressed data (must be freed with Buffer::deleter) or nullptr
 	 */
 	EXPORT uint8_t *compress(const uint8_t *src, uint32_t &size, bool sensitive=false);
-	
+
 	/**
 	 *  Decompress data compressed with compress
 	 *
@@ -64,7 +64,7 @@ public:
 	 *  @return decompressed data (must be freed with Buffer::deleter) or nullptr
 	 */
 	EXPORT uint8_t *decompress(const uint8_t *src, uint32_t &size, bool sensitive=false);
-	
+
 	/**
 	 *  Value storage options
 	 */
@@ -76,7 +76,7 @@ public:
 		OptChecksum     = 8,  // Append CRC32 checksum to the end
 		OptSensitive    = 16  // Value contains sensitive data
 	};
-	
+
 	/**
 	 *  Prepended value header unless OptRaw is used
 	 *  After the header the following fields should go:
@@ -90,12 +90,12 @@ public:
 		static constexpr uint16_t Magic = 0xC717;
 		static constexpr uint8_t MaxVer = 1;
 		using Checksum = uint32_t;
-		
+
 		uint16_t magic {Magic};
 		uint8_t version {MaxVer};
 		uint8_t opts {OptAuto};
 	};
-	
+
 	/**
 	 *  Attempt to connect to active nvram, may fail at early stages
 	 *
@@ -107,7 +107,7 @@ public:
 	 *  Relinquish resources used, must be called regardless of the init error
 	 */
 	EXPORT void deinit();
-	
+
 	/**
 	 *  Read data from nvram
 	 *
@@ -143,7 +143,7 @@ public:
 	 *  @return true on success
 	 */
 	EXPORT bool write(const char *key, const uint8_t *src, uint32_t sz, uint8_t opts=OptAuto, const uint8_t *enckey=nullptr);
-    
+
 	/**
 	 *  Write data to nvram
 	 *
@@ -165,7 +165,7 @@ public:
 	 *  @return true on successful deletion or if key is missing
 	 */
 	EXPORT bool remove(const char *key, bool sensitive=false);
-	
+
 	/**
 	 *  Synchronize with nvram controller
 	 *  This method might fail if synchronisation was done recently.
@@ -173,7 +173,7 @@ public:
 	 *  @return true if synchronised
 	 */
 	EXPORT bool sync();
-	
+
 	/**
 	 *  Exports nvram to a plist file
 	 *

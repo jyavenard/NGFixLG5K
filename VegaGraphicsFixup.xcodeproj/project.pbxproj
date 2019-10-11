@@ -41,6 +41,13 @@
 		3BAED1281FE8F415008A4363 /* mac_policy.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BAED1221FE8F415008A4363 /* mac_policy.h */; };
 		3BAED1291FE8F415008A4363 /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BAED1231FE8F415008A4363 /* plugin_start.cpp */; };
 		3BAED12A1FE8F415008A4363 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BAED1241FE8F415008A4363 /* libkmod.a */; };
+		512BDE0C2350925400961A91 /* kern_devinfo.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE062350925400961A91 /* kern_devinfo.hpp */; };
+		512BDE0D2350925400961A91 /* kern_efi.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE072350925400961A91 /* kern_efi.hpp */; };
+		512BDE0E2350925400961A91 /* kern_rtc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE082350925400961A91 /* kern_rtc.hpp */; };
+		512BDE0F2350925400961A91 /* kern_cpu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE092350925400961A91 /* kern_cpu.hpp */; };
+		512BDE102350925400961A91 /* kern_atomic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE0A2350925400961A91 /* kern_atomic.hpp */; };
+		512BDE112350925400961A91 /* kern_time.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE0B2350925400961A91 /* kern_time.hpp */; };
+		512BDE15235092C800961A91 /* LegacyLibkernMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 512BDE14235092C800961A91 /* LegacyLibkernMacros.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -95,6 +102,13 @@
 		3BAED1221FE8F415008A4363 /* mac_policy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mac_policy.h; sourceTree = "<group>"; };
 		3BAED1231FE8F415008A4363 /* plugin_start.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_start.cpp; path = Lilu.kext/Contents/Resources/Library/plugin_start.cpp; sourceTree = "<group>"; };
 		3BAED1241FE8F415008A4363 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = Lilu.kext/Contents/Resources/Library/libkmod.a; sourceTree = "<group>"; };
+		512BDE062350925400961A91 /* kern_devinfo.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_devinfo.hpp; sourceTree = "<group>"; };
+		512BDE072350925400961A91 /* kern_efi.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_efi.hpp; sourceTree = "<group>"; };
+		512BDE082350925400961A91 /* kern_rtc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_rtc.hpp; sourceTree = "<group>"; };
+		512BDE092350925400961A91 /* kern_cpu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_cpu.hpp; sourceTree = "<group>"; };
+		512BDE0A2350925400961A91 /* kern_atomic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_atomic.hpp; sourceTree = "<group>"; };
+		512BDE0B2350925400961A91 /* kern_time.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_time.hpp; sourceTree = "<group>"; };
+		512BDE14235092C800961A91 /* LegacyLibkernMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyLibkernMacros.h; path = Lilu.kext/Contents/Resources/Library/LegacyLibkernMacros.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +166,12 @@
 			isa = PBXGroup;
 			children = (
 				3BAED0EB1FE8F3F9008A4363 /* capstone */,
+				512BDE0A2350925400961A91 /* kern_atomic.hpp */,
+				512BDE092350925400961A91 /* kern_cpu.hpp */,
+				512BDE062350925400961A91 /* kern_devinfo.hpp */,
+				512BDE072350925400961A91 /* kern_efi.hpp */,
+				512BDE082350925400961A91 /* kern_rtc.hpp */,
+				512BDE0B2350925400961A91 /* kern_time.hpp */,
 				3BAED0F61FE8F3F9008A4363 /* kern_api.hpp */,
 				3BAED0F71FE8F3F9008A4363 /* kern_compat.hpp */,
 				3BAED0F81FE8F3F9008A4363 /* kern_compression.hpp */,
@@ -203,6 +223,7 @@
 		CE405EC81E49DD7B00AA0B3D /* SDK */ = {
 			isa = PBXGroup;
 			children = (
+				512BDE14235092C800961A91 /* LegacyLibkernMacros.h */,
 				3BAED11E1FE8F415008A4363 /* LegacyIOService.h */,
 				3BAED1241FE8F415008A4363 /* libkmod.a */,
 				3BAED1231FE8F415008A4363 /* plugin_start.cpp */,
@@ -220,11 +241,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BAED1121FE8F3F9008A4363 /* kern_config.hpp in Headers */,
+				512BDE112350925400961A91 /* kern_time.hpp in Headers */,
+				512BDE15235092C800961A91 /* LegacyLibkernMacros.h in Headers */,
 				3BAED1181FE8F3F9008A4363 /* kern_nvram.hpp in Headers */,
 				3BAED1281FE8F415008A4363 /* mac_policy.h in Headers */,
+				512BDE102350925400961A91 /* kern_atomic.hpp in Headers */,
 				3BAED1171FE8F3F9008A4363 /* kern_mach.hpp in Headers */,
 				3BAED10C1FE8F3F9008A4363 /* systemz.h in Headers */,
+				512BDE0D2350925400961A91 /* kern_efi.hpp in Headers */,
 				3BAED1251FE8F415008A4363 /* LegacyIOService.h in Headers */,
+				512BDE0E2350925400961A91 /* kern_rtc.hpp in Headers */,
 				3BAED1261FE8F415008A4363 /* _label.h in Headers */,
 				3BAED11C1FE8F3F9008A4363 /* kern_util.hpp in Headers */,
 				3BAED10B1FE8F3F9008A4363 /* sparc.h in Headers */,
@@ -241,12 +267,14 @@
 				3BAED1081FE8F3F9008A4363 /* mips.h in Headers */,
 				3BAED10F1FE8F3F9008A4363 /* kern_api.hpp in Headers */,
 				3BAED1091FE8F3F9008A4363 /* platform.h in Headers */,
+				512BDE0C2350925400961A91 /* kern_devinfo.hpp in Headers */,
 				3BAED11A1FE8F3F9008A4363 /* kern_policy.hpp in Headers */,
 				3BAED10A1FE8F3F9008A4363 /* ppc.h in Headers */,
 				3BAED1111FE8F3F9008A4363 /* kern_compression.hpp in Headers */,
 				3BAED10D1FE8F3F9008A4363 /* x86.h in Headers */,
 				3BAED1191FE8F3F9008A4363 /* kern_patcher.hpp in Headers */,
 				3BAED1051FE8F3F9008A4363 /* arm.h in Headers */,
+				512BDE0F2350925400961A91 /* kern_cpu.hpp in Headers */,
 				3BAED1061FE8F3F9008A4363 /* arm64.h in Headers */,
 				3BAED10E1FE8F3F9008A4363 /* xcore.h in Headers */,
 			);
@@ -293,6 +321,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 1C748C1D1C21952C0024EED2;
@@ -438,7 +467,7 @@
 				MODULE_NAME = as.lvs1974.NvidiaGraphicsFixup;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
-				MODULE_VERSION = 1.2.3;
+				MODULE_VERSION = 1.2.4;
 				OTHER_CFLAGS = (
 					"-mmmx",
 					"-msse",
@@ -482,7 +511,7 @@
 				MODULE_NAME = as.lvs1974.NvidiaGraphicsFixup;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
-				MODULE_VERSION = 1.2.3;
+				MODULE_VERSION = 1.2.4;
 				OTHER_CFLAGS = (
 					"-mmmx",
 					"-msse",
