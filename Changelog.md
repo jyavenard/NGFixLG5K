@@ -8,4 +8,6 @@ VegaGraphicsFixup Changelog
 - Add Lilu 1.2.5 support, proper Mojave support
 #### v1.2.4
 - Add Lilu 1.3.x support, add Catalina (10.15) support
+#### v1.2.5
+- Add Lilu 1.4.x support, add Catalina (10.15) support
 
