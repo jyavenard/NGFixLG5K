@@ -27,7 +27,7 @@ PluginConfiguration ADDPR(config) {
 	bootarg,
 	0,
 	KernelVersion::MountainLion,
-	KernelVersion::Catalina,
+	KernelVersion::BigSur,
 	[]() {
 		ngfx.init();
 	}
